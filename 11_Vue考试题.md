@@ -214,9 +214,13 @@
    
    
 2. ```markdown
-   - Vue2的响应式原理：
+   - Vue2的响应式原理：具体实现上用到了Observer、Dep、Watcher、Scheduler四个核心部件
+   - Observer：首先Observer部件通过Object.defineProperty将vue实例配置的data选项的属性逐一遍历转换为getter/setter属性，此步骤便将这些属性完成了数据响应式处理。
+   - Dep：Dep构造器为每一个上述属性创建一个dep实例，用于后续进行的依赖收集和派发更新。
+   - Watcher：Watcher构造器为每一个执行过程中用到响应式数据的函数创建一个watcher实例，当这些函数调用时，对应的响应式数据的dep实例会记录依赖即这些函数的watcher实例，当依赖项的setter触发时，会通知相应的watcher，从而执行相关函数完成关联的组件的渲染。
+   - Scheduler：vue在更新DOM时是异步的，即watcher的触发是异步的，当侦听到数据变化，调度器会开始维护一个队列，缓冲在同一事件循环中发生的所有数据变更。若同一个watcher被多次触发，只会被推入队列中一次。当内部的工具方法nextTick调用后，该队列被加入到事件循环的微队列（或宏队列）中执行，并刷新队列。
    ```
-
+   
    
    
 3. ```markdown
